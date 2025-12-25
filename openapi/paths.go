@@ -37,6 +37,4 @@ type Operation struct {
 }
 
 type Parameter struct {
-	// 引用
-	Ref string `yaml:"$ref"`
 }
