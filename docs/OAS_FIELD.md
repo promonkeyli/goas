@@ -1,10 +1,7 @@
-# OpenAPI 3.2.0 规范字段参考文档
+# OpenAPI 3.2.0 字段参考文档
 
 本文档总结了 OpenAPI 3.2.0 规范中的核心对象及其字段，提供详尽的中文描述，方便开发人员查阅。
 
----
-
-## 目录
 1. [根对象 (OpenAPI Object)](#1-根对象-openapi-object)
 2. [元数据对象 (Info Object)](#2-元数据对象-info-object)
 3. [服务器对象 (Server Object)](#3-服务器对象-server-object)
