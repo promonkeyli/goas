@@ -1,8 +1,9 @@
-# Go OpenAPI 3.2 Global Annotation Specification
+# GOAS 注释规范
 
-**适用文件**：`main.go`
-**解析位置**：`package main` 之前或 `main()` 函数之前。
-**解析规则**：按行解析，参数间以空格分隔，`[]` 表示可选，`<>` 表示必填占位符。
+### 全局注释
+
+> **适用文件**：`main.go`
+> **解析规则**：按行解析，参数间以空格分隔，`[]` 表示可选，`<>` 表示必填占位符。
 
 | 分类 | 注解标记 | 必填 | 参数格式 | 说明 / 映射字段 | 示例 |
 | :--: | :--- | :---: | :--- | :--- | :--- |
@@ -33,9 +34,7 @@
 | | `@SecurityScope` | 否 | `<scheme> <scope> <desc>` | 定义 OAuth2 的 Scope。<br>映射: `Flows.Scopes` | `// @SecurityScope OAuth write 读写` |
 | **全局安全** | **`@Security`** | 否 | `<name> [scopes...]` | 应用全局安全限制。<br>映射: `T.Security` | `// @Security JWT` |
 
----
-
-### 使用示例
+#### 示例
 
 ```go
 package main
@@ -60,3 +59,50 @@ package main
 func main() {
     // ...
 }
+```
+
+### 接口注释
+
+> **适用范围**：API 接口处理函数（Handler Functions）上方。
+> **解析规则**：按行解析，参数间以空格分隔，`[]` 表示可选，`<>` 表示必填占位符。
+
+| 分类 | 注解标记 | 必填 | 参数格式 | 说明 / 映射字段 | 示例 |
+| :--- | :--- | :---: | :--- | :--- | :--- |
+| **路由配置** | **`@Router`** | **是** | `<path> [method]` | 定义路径和方法<br>映射: `Paths.{path}.{method}` | `// @Router /users/{id} [get]` |
+| | `@Id` | 否 | `<string>` | 操作唯一标识符<br>映射: `Operation.OperationId` | `// @Id getUserById` |
+| | `@Ignore` | 否 | - | 让工具忽略此函数，不生成文档。 | `// @Ignore` |
+| | `@Deprecated` | 否 | - | 标记接口已废弃<br>映射: `Operation.Deprecated` | `// @Deprecated` |
+| **基本信息** | **`@Summary`** | **是** | `<text>` | 接口简短摘要<br>映射: `Operation.Summary` | `// @Summary 获取用户详情` |
+| | `@Description` | 否 | `<markdown>` | 接口详细描述 (支持多行)<br>映射: `Operation.Description` | `// @Description 查询用户的详细信息` |
+| | `@Tags` | 否 | `<tag>[,tag...]` | 接口所属标签 (分组)<br>映射: `Operation.Tags` | `// @Tags user, admin` |
+| **请求控制** | **`@Param`** | 否 | `<name> <in> <type> <req> <desc>` | 定义参数。<br>**in**: path/query/header/cookie/body/formData<br>**type**: string/int/file/struct<br>**req**: true/false<br>映射: `Parameters` 或 `RequestBody` | 1. `// @Param id path int true "用户ID"`<br>2. `// @Param q query string false "搜索"`<br>3. `// @Param req body model.User true "JSON"` |
+| | `@Accept` | 否 | `<mime_type>` | 请求体类型 (Content-Type)<br>映射: `RequestBody.Content` Key | `// @Accept json,xml` |
+| **响应定义** | **`@Success`** | **是*** | `<status> {<type>} <data> [desc]` | 成功响应 (*建议至少写一个)<br>**status**: 200/201...<br>**type**: object/array/string<br>**data**: Go类型或结构体路径 | `// @Success 200 {object} model.User "成功"`<br>`// @Success 200 {array} model.Item "列表"` |
+| | `@Failure` | 否 | `<status> {<type>} <data> [desc]` | 失败响应<br>格式同上 | `// @Failure 400 {object} err.Resp "参数错误"` |
+| | `@Produce` | 否 | `<mime_type>` | 响应类型 (Accept)<br>映射: `Responses.Content` Key | `// @Produce json` |
+| | `@Header` | 否 | `<status> {<type>} <name> <desc>` | 响应头信息<br>映射: `Responses.Headers` | `// @Header 200 {string} Token "会话Token"` |
+| **安全与扩展** | `@Security` | 否 | `<name> [scopes...]` | 覆盖全局安全设置<br>映射: `Operation.Security` | `// @Security ApiKeyAuth` |
+| | `@ExternalDocs` | 否 | `<url> [desc]` | 接口级外部文档<br>映射: `Operation.ExternalDocs` | `// @ExternalDocs http://wiki.com 详情` |
+
+#### 示例
+
+```go
+package user
+
+// GetUser 获取用户详情
+// @Summary 获取用户详情
+// @Description 根据用户 ID 查询用户的详细信息，包括角色和权限。
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param id path int true "用户 ID"
+// @Param type query string false "视图类型"
+// @Success 200 {object} model.UserResponse "用户信息"
+// @Failure 400 {object} model.ErrorResponse "ID 无效"
+// @Failure 404 {object} model.ErrorResponse "用户不存在"
+// @Router /users/{id} [get]
+// @Security ApiKeyAuth
+func GetUser(c *gin.Context) {
+    // ...
+}
+```
