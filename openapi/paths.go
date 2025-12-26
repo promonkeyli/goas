@@ -3,7 +3,7 @@ package openapi
 // Paths 持有各个路径及其操作的定义
 type Paths struct {
 	// 接口的路径映射
-	Paths map[string]*PathItem `yaml:",inline"`
+	Paths map[string]*PathItem `yaml:",inline"` // inline 用于将键值对直接嵌入到父结构中,避免出现多余的嵌套层级 paths
 }
 
 // PathItem 描述在单个路径上可用的操作
