@@ -85,4 +85,6 @@ func GetUser() {
 
 ## Documentation
 
-See [GOAS_COMMOENT.md](docs/GOAS_COMMOENT.md) for detailed annotation specification.
+- [GOAS Annotation Specification](docs/GOAS_COMMOENT.md): Detailed guide on using goas annotations.
+- [OpenAPI 3.2.0 Field Reference](docs/OAS_FIELD.md): Quick reference for OpenAPI 3.2.0 objects and fields.
+- [OpenAPI Specification 3.2.0](docs/OAS_STANDARD.md): Full OpenAPI 3.2.0 Specification.
