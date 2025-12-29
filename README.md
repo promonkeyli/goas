@@ -21,14 +21,62 @@ Parses Go code comments to generate OpenAPI 3.2 specification JSON.
 - [x] Schema Generation (Generics support included)
 - [x] CLI Tool
 
-## Usage
+## Installation
+
+### Method 1: Global Installation (CLI)
+
+Install the command-line tool globally:
 
 ```bash
-# Build the tool
-go build -o goas ./cmd/goas
+go install github.com/promonkeyli/goas/cmd/goas@latest
+```
 
-# Run generator
-./goas -dir ./cmd,./internal -output ./api
+### Method 2: Project Dependency (Library)
+
+Add as a dependency to your project:
+
+```bash
+go get github.com/promonkeyli/goas
+```
+
+## Usage
+
+### 1. CLI Usage
+
+If installed globally, run directly:
+
+```bash
+goas -dir ./cmd,./internal -output ./api
+```
+
+Or run via go run in your project:
+
+```bash
+go run github.com/promonkeyli/goas/cmd/goas -dir ./cmd,./internal -output ./api
+```
+
+### 2. Library Usage (Function Call)
+
+You can also integrate goas directly into your Go code (e.g., in a generator script):
+
+```go
+package main
+
+import (
+    "log"
+    "github.com/promonkeyli/goas/pkg/goas"
+)
+
+func main() {
+    config := goas.Config{
+        Dirs:   []string{"./cmd", "./internal"},
+        Output: "./api",
+    }
+
+    if err := goas.Run(config); err != nil {
+        log.Fatalf("Failed to generate OpenAPI: %v", err)
+    }
+}
 ```
 
 ## Quick Start

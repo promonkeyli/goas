@@ -6,8 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/promonkeyli/goas/pkg/generater"
-	"github.com/promonkeyli/goas/pkg/parser"
+	"github.com/promonkeyli/goas/pkg/goas"
 )
 
 func main() {
@@ -27,7 +26,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// 5. 逗号分隔参数,调用解析器
+	// 5. 逗号分隔参数
 	var dirs []string
 	for _, s := range strings.Split(dir, ",") {
 		s = strings.TrimSpace(s) // 去掉空格
@@ -35,16 +34,14 @@ func main() {
 			dirs = append(dirs, s)
 		}
 	}
-	// 调用解析器
-	openapi, err := parser.Parse(dirs)
-	if err != nil {
-		slog.Error("解析失败", "error", err)
-		os.Exit(1)
-	}
 
-	// 6. 输出文件
-	if err := generater.GenFiles(openapi, output); err != nil {
-		slog.Error("生成失败", "error", err)
+	// 6. 调用库函数
+	cfg := goas.Config{
+		Dirs:   dirs,
+		Output: output,
+	}
+	if err := goas.Run(cfg); err != nil {
+		slog.Error("执行失败", "error", err)
 		os.Exit(1)
 	}
 }
