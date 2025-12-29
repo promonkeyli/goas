@@ -1,7 +1,466 @@
 {
-  "openapi": "",
+  "openapi": "3.2.0",
   "info": {
-    "title": "",
-    "version": ""
-  }
+    "title": "Pet Store API",
+    "summary": "A sample pet store server",
+    "description": "This is a Go implementation of the OpenAPI 3.2 Pet Store.\nSupports user management and file uploads.",
+    "termsOfService": "http://localhost:8080/terms",
+    "contact": {
+      "name": "API Support",
+      "url": "http://localhost:8080/support",
+      "email": "support@example.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "identifier": "Apache-2.0"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/v1",
+      "description": "开发环境",
+      "name": "dev"
+    },
+    {
+      "url": "https://api.example.com/v1",
+      "description": "生产环境",
+      "name": "prod"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "获取用户列表",
+        "description": "分页查询用户列表",
+        "operationId": "ListUsers",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "搜索关键词",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseOfPageList[User]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "参数错误",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "创建用户",
+        "description": "创建一个新用户",
+        "operationId": "CreateUser",
+        "requestBody": {
+          "description": "用户信息",
+          "content": {
+            "application/json": {
+              "schema": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseOfUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "参数错误",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "获取用户详情",
+        "description": "根据用户 ID 查询用户的详细信息",
+        "operationId": "GetUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseOfUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "参数错误",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "用户不存在",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "更新用户信息",
+        "description": "更新指定用户的信息",
+        "operationId": "UpdateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "用户信息",
+          "content": {
+            "application/json": {
+              "schema": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseOfUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "参数错误",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "用户不存在",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "删除用户",
+        "description": "删除指定用户",
+        "operationId": "DeleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "用户不存在",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/users/{id}/avatar": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "上传用户头像",
+        "operationId": "UploadAvatar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "description": "头像文件",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "avatar"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "上传成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseOfstring"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "上传失败",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PageListOfUser": {
+        "title": "PageListOfUser",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "数据列表",
+            "type": "array",
+            "items": {}
+          },
+          "page": {
+            "description": "当前页",
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "description": "每页数量",
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "description": "总数",
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "total",
+          "page",
+          "size",
+          "items"
+        ]
+      },
+      "ResponseOfPageList[User]": {
+        "title": "ResponseOfPageList[User]",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageListOfUser",
+            "description": "数据"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      },
+      "ResponseOfUser": {
+        "title": "ResponseOfUser",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "description": "数据"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      },
+      "ResponseOfstring": {
+        "title": "ResponseOfstring",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "description": "数据",
+            "type": "string"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "name": "X-API-KEY",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "user",
+      "summary": "用户管理",
+      "description": "用户的增删改查操作",
+      "kind": "nav"
+    },
+    {
+      "name": "admin",
+      "summary": "管理后台",
+      "parent": "user"
+    }
+  ]
 }
