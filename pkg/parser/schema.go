@@ -13,24 +13,22 @@ import (
 // 支持: 基本类型, 包路径.类型名, 泛型类型 (如 Response[User])
 func (p *Processor) resolveTypeSchema(pkg *packages.Package, typeName string) *model.Schema {
 	if typeName == "" {
-		fmt.Printf("[DEBUG resolveTypeSchema] Empty typeName\n")
 		return nil
 	}
 
 	// 处理泛型类型 (如 Response[User], Page[model.Item])
 	if genericBase, typeArgs := parseGenericType(typeName); genericBase != "" {
-		fmt.Printf("[DEBUG resolveTypeSchema] %q is generic -> %s[%v]\n", typeName, genericBase, typeArgs)
 		return p.resolveGenericSchema(pkg, genericBase, typeArgs)
 	}
 
 	// 处理基本类型
-	if schema := p.primitiveTypeToSchema(typeName); schema != nil && schema.Type != "" {
-		fmt.Printf("[DEBUG resolveTypeSchema] %q is primitive -> %v\n", typeName, schema.Type)
-		return schema
+	if schema := p.primitiveTypeToSchema(typeName); schema != nil {
+		if typeStr, ok := schema.Type.(string); ok && typeStr != "" {
+			return schema
+		}
 	}
 
 	// 处理复合类型引用
-	fmt.Printf("[DEBUG resolveTypeSchema] %q going to resolveStructSchema\n", typeName)
 	return p.resolveStructSchema(pkg, typeName)
 }
 
@@ -219,11 +217,7 @@ func (p *Processor) typeToSchemaWithSubstitution(pkg *packages.Package, t types.
 		// 类型参数，用实际类型替换
 		paramIndex := typ.Index()
 		if paramIndex < len(typeArgs) {
-			fmt.Printf("[DEBUG] TypeParam %s (index %d) -> typeArgs[%d] = %q, pkg=%s\n",
-				typ.Obj().Name(), paramIndex, paramIndex, typeArgs[paramIndex], pkg.PkgPath)
-			result := p.resolveTypeSchema(pkg, typeArgs[paramIndex])
-			fmt.Printf("[DEBUG] Result: Type=%v, Ref=%s\n", result.Type, result.Ref)
-			return result
+			return p.resolveTypeSchema(pkg, typeArgs[paramIndex])
 		}
 		return &model.Schema{Type: "object"}
 
@@ -317,12 +311,10 @@ func (p *Processor) resolveStructSchema(pkg *packages.Package, typeName string) 
 
 	// 解析包路径和类型名
 	pkgPath, shortName := parseTypePath(pkg, typeName)
-	fmt.Printf("[DEBUG resolveStructSchema] typeName=%q, pkgPath=%s, shortName=%s\n", typeName, pkgPath, shortName)
 
 	// 检查缓存
 	fullName := pkgPath + "." + shortName
 	if ref, ok := p.GeneratedSchemas[fullName]; ok {
-		fmt.Printf("[DEBUG resolveStructSchema] Found in cache: %s\n", ref)
 		return &model.Schema{Ref: ref}
 	}
 
@@ -331,29 +323,23 @@ func (p *Processor) resolveStructSchema(pkg *packages.Package, typeName string) 
 	var targetPkg *packages.Package
 	if pkg != nil && pkgPath == pkg.PkgPath {
 		targetPkg = pkg
-		fmt.Printf("[DEBUG resolveStructSchema] Using passed pkg directly\n")
 	} else {
 		targetPkg = p.findPackage(pkgPath)
-		fmt.Printf("[DEBUG resolveStructSchema] Used findPackage, result=%v\n", targetPkg != nil)
 	}
 	if targetPkg == nil || targetPkg.Types == nil {
 		// 无法找到包，返回空 object
-		fmt.Printf("[DEBUG resolveStructSchema] targetPkg nil or no Types\n")
 		return &model.Schema{Type: "object"}
 	}
 
 	// 查找类型对象
 	obj := targetPkg.Types.Scope().Lookup(shortName)
 	if obj == nil {
-		fmt.Printf("[DEBUG resolveStructSchema] %s not found in scope\n", shortName)
 		return &model.Schema{Type: "object"}
 	}
-	fmt.Printf("[DEBUG resolveStructSchema] Found %s: %T\n", shortName, obj.Type())
 
 	typeDef, ok := obj.Type().Underlying().(*types.Struct)
 	if !ok {
 		// 可能是类型别名或基本类型
-		fmt.Printf("[DEBUG resolveStructSchema] %s underlying is not struct: %T\n", shortName, obj.Type().Underlying())
 		return p.typeToSchema(obj.Type())
 	}
 

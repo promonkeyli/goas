@@ -80,7 +80,9 @@
             "description": "参数错误",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -97,7 +99,9 @@
           "description": "用户信息",
           "content": {
             "application/json": {
-              "schema": {}
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
             }
           },
           "required": true
@@ -117,7 +121,9 @@
             "description": "参数错误",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -159,7 +165,9 @@
             "description": "参数错误",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -167,7 +175,9 @@
             "description": "用户不存在",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -201,7 +211,9 @@
           "description": "用户信息",
           "content": {
             "application/json": {
-              "schema": {}
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
             }
           },
           "required": true
@@ -221,7 +233,9 @@
             "description": "参数错误",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -229,7 +243,9 @@
             "description": "用户不存在",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -262,7 +278,9 @@
             "description": "用户不存在",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -323,7 +341,9 @@
             "description": "上传失败",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -333,6 +353,29 @@
   },
   "components": {
     "schemas": {
+      "ErrorResponse": {
+        "title": "ErrorResponse",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "错误码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "description": "详细信息",
+            "type": "string"
+          },
+          "message": {
+            "description": "错误信息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
       "PageListOfUser": {
         "title": "PageListOfUser",
         "type": "object",
@@ -340,7 +383,9 @@
           "items": {
             "description": "数据列表",
             "type": "array",
-            "items": {}
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
           },
           "page": {
             "description": "当前页",
@@ -399,6 +444,7 @@
             "format": "int32"
           },
           "data": {
+            "$ref": "#/components/schemas/User",
             "description": "数据"
           },
           "message": {
@@ -434,6 +480,39 @@
           "code",
           "message",
           "data"
+        ]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "age": {
+            "description": "年龄",
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "description": "邮箱",
+            "type": "string"
+          },
+          "id": {
+            "description": "用户ID",
+            "type": "integer",
+            "format": "int32"
+          },
+          "is_active": {
+            "description": "是否激活",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "用户名",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "is_active"
         ]
       }
     },
