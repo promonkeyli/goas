@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Example 描述一个示例对象
 type Example struct {

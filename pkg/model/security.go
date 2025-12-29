@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // SecurityScheme 定义一个安全方案
 type SecurityScheme struct {

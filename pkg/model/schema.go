@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Schema 允许定义输入和输出数据类型
 type Schema struct {

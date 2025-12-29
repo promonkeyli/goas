@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Encoding 描述属性如何序列化
 type Encoding struct {

@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Server 表示一个服务器对象
 type Server struct {

@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Paths 持有各个路径及其操作的定义
 type Paths struct {

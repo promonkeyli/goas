@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // MediaType 提供媒体类型的详细信息
 type MediaType struct {

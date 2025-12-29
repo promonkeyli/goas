@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Responses 操作预期响应的容器
 type Responses struct {

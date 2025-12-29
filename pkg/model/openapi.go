@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // T 是 OpenAPI 文档的根对象
 type T struct {

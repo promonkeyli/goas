@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // RequestBody 描述单个请求体
 type RequestBody struct {

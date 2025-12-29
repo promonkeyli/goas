@@ -1,4 +1,4 @@
-package openapi
+package model
 
 // Parameter 描述单个操作参数
 type Parameter struct {
