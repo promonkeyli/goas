@@ -20,5 +20,5 @@ import "fmt"
 // @server test http://localhost:8080 测试环境server description
 // @server prod http://localhost:8080 生产环境server description
 func main() {
-	fmt.Println("Test Start")
+	fmt.Println("cmd file")
 }

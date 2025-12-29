@@ -44,7 +44,7 @@ func main() {
 
 	// 6. 输出文件
 	if err := generater.GenFiles(openapi, output); err != nil {
-		slog.Error("生成文件失败", "error", err)
+		slog.Error("生成失败", "error", err)
 		os.Exit(1)
 	}
 }

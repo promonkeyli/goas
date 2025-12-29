@@ -3,97 +3,97 @@ package model
 // Schema 允许定义输入和输出数据类型
 type Schema struct {
 	// JSON Schema 核心字段
-	Ref string `yaml:"$ref,omitempty"`
-	ID  string `yaml:"$id,omitempty"`
+	Ref string `json:"$ref,omitempty"`
+	ID  string `json:"$id,omitempty"`
 
 	// 元数据
-	Title       string `yaml:"title,omitempty"`
-	Description string `yaml:"description,omitempty"`
-	Comment     string `yaml:"$comment,omitempty"`
+	Title       string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
+	Comment     string `json:"$comment,omitempty"`
 
 	// 类型定义
-	Type   any    `yaml:"type,omitempty"` // 可以是 string 或 []string (3.1+)
-	Format string `yaml:"format,omitempty"`
-	Const  any    `yaml:"const,omitempty"`
-	Enum   []any  `yaml:"enum,omitempty"`
+	Type   any    `json:"type,omitempty"` // 可以是 string 或 []string (3.1+)
+	Format string `json:"format,omitempty"`
+	Const  any    `json:"const,omitempty"`
+	Enum   []any  `json:"enum,omitempty"`
 
 	// 数组相关
-	Items       *Schema   `yaml:"items,omitempty"`
-	PrefixItems []*Schema `yaml:"prefixItems,omitempty"`
-	MaxItems    int       `yaml:"maxItems,omitempty"`
-	MinItems    int       `yaml:"minItems,omitempty"`
-	UniqueItems bool      `yaml:"uniqueItems,omitempty"`
-	Contains    *Schema   `yaml:"contains,omitempty"`
+	Items       *Schema   `json:"items,omitempty"`
+	PrefixItems []*Schema `json:"prefixItems,omitempty"`
+	MaxItems    int       `json:"maxItems,omitempty"`
+	MinItems    int       `json:"minItems,omitempty"`
+	UniqueItems bool      `json:"uniqueItems,omitempty"`
+	Contains    *Schema   `json:"contains,omitempty"`
 
 	// 对象相关
-	Properties           map[string]*Schema `yaml:"properties,omitempty"`
-	PatternProperties    map[string]*Schema `yaml:"patternProperties,omitempty"`
-	AdditionalProperties any                `yaml:"additionalProperties,omitempty"` // bool 或 *Schema
-	Required             []string           `yaml:"required,omitempty"`
-	MaxProperties        int                `yaml:"maxProperties,omitempty"`
-	MinProperties        int                `yaml:"minProperties,omitempty"`
-	PropertyNames        *Schema            `yaml:"propertyNames,omitempty"`
+	Properties           map[string]*Schema `json:"properties,omitempty"`
+	PatternProperties    map[string]*Schema `json:"patternProperties,omitempty"`
+	AdditionalProperties any                `json:"additionalProperties,omitempty"` // bool 或 *Schema
+	Required             []string           `json:"required,omitempty"`
+	MaxProperties        int                `json:"maxProperties,omitempty"`
+	MinProperties        int                `json:"minProperties,omitempty"`
+	PropertyNames        *Schema            `json:"propertyNames,omitempty"`
 
 	// 组合模式
-	AllOf []*Schema `yaml:"allOf,omitempty"`
-	OneOf []*Schema `yaml:"oneOf,omitempty"`
-	AnyOf []*Schema `yaml:"anyOf,omitempty"`
-	Not   *Schema   `yaml:"not,omitempty"`
+	AllOf []*Schema `json:"allOf,omitempty"`
+	OneOf []*Schema `json:"oneOf,omitempty"`
+	AnyOf []*Schema `json:"anyOf,omitempty"`
+	Not   *Schema   `json:"not,omitempty"`
 
 	// 数值限制
-	MultipleOf       float64 `yaml:"multipleOf,omitempty"`
-	Maximum          any     `yaml:"maximum,omitempty"` // number 或 bool (exclusiveMaximum)
-	ExclusiveMaximum any     `yaml:"exclusiveMaximum,omitempty"`
-	Minimum          any     `yaml:"minimum,omitempty"` // number 或 bool (exclusiveMinimum)
-	ExclusiveMinimum any     `yaml:"exclusiveMinimum,omitempty"`
+	MultipleOf       float64 `json:"multipleOf,omitempty"`
+	Maximum          any     `json:"maximum,omitempty"` // number 或 bool (exclusiveMaximum)
+	ExclusiveMaximum any     `json:"exclusiveMaximum,omitempty"`
+	Minimum          any     `json:"minimum,omitempty"` // number 或 bool (exclusiveMinimum)
+	ExclusiveMinimum any     `json:"exclusiveMinimum,omitempty"`
 
 	// 字符串限制
-	MaxLength int    `yaml:"maxLength,omitempty"`
-	MinLength int    `yaml:"minLength,omitempty"`
-	Pattern   string `yaml:"pattern,omitempty"`
+	MaxLength int    `json:"maxLength,omitempty"`
+	MinLength int    `json:"minLength,omitempty"`
+	Pattern   string `json:"pattern,omitempty"`
 
 	// 字符串内容
-	ContentMediaType string  `yaml:"contentMediaType,omitempty"`
-	ContentEncoding  string  `yaml:"contentEncoding,omitempty"`
-	ContentSchema    *Schema `yaml:"contentSchema,omitempty"`
+	ContentMediaType string  `json:"contentMediaType,omitempty"`
+	ContentEncoding  string  `json:"contentEncoding,omitempty"`
+	ContentSchema    *Schema `json:"contentSchema,omitempty"`
 
 	// 默认值和示例
-	Default  any   `yaml:"default,omitempty"`
-	Examples []any `yaml:"examples,omitempty"`
+	Default  any   `json:"default,omitempty"`
+	Examples []any `json:"examples,omitempty"`
 
 	// OpenAPI 特定扩展
-	Nullable      bool           `yaml:"nullable,omitempty"`
-	Discriminator *Discriminator `yaml:"discriminator,omitempty"`
-	ReadOnly      bool           `yaml:"readOnly,omitempty"`
-	WriteOnly     bool           `yaml:"writeOnly,omitempty"`
-	XML           *XML           `yaml:"xml,omitempty"`
-	ExternalDocs  *ExternalDocs  `yaml:"externalDocs,omitempty"`
-	Example       any            `yaml:"example,omitempty"` // 已弃用，使用 examples
-	Deprecated    bool           `yaml:"deprecated,omitempty"`
+	Nullable      bool           `json:"nullable,omitempty"`
+	Discriminator *Discriminator `json:"discriminator,omitempty"`
+	ReadOnly      bool           `json:"readOnly,omitempty"`
+	WriteOnly     bool           `json:"writeOnly,omitempty"`
+	XML           *XML           `json:"xml,omitempty"`
+	ExternalDocs  *ExternalDocs  `json:"externalDocs,omitempty"`
+	Example       any            `json:"example,omitempty"` // 已弃用，使用 examples
+	Deprecated    bool           `json:"deprecated,omitempty"`
 }
 
 // Discriminator 帮助多态
 type Discriminator struct {
 	// 要区分的属性名称
-	PropertyName string `yaml:"propertyName"`
+	PropertyName string `json:"propertyName"`
 	// 区分属性值到 Schema 名称或引用的可选映射
-	Mapping map[string]string `yaml:"mapping,omitempty"`
+	Mapping map[string]string `json:"mapping,omitempty"`
 	// 当区分属性不存在或无映射时使用的默认 Schema 名称或引用
-	DefaultMapping string `yaml:"defaultMapping,omitempty"`
+	DefaultMapping string `json:"defaultMapping,omitempty"`
 }
 
 // XML 为描述 XML 数据提供额外信息
 type XML struct {
 	// 节点类型 (element, attribute, text, cdata, none)
-	NodeType string `yaml:"nodeType,omitempty"`
+	NodeType string `json:"nodeType,omitempty"`
 	// 元素或属性的名称
-	Name string `yaml:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 	// 命名空间的 IRI
-	Namespace string `yaml:"namespace,omitempty"`
+	Namespace string `json:"namespace,omitempty"`
 	// 命名空间的前缀
-	Prefix string `yaml:"prefix,omitempty"`
+	Prefix string `json:"prefix,omitempty"`
 	// 声明此属性是否为 XML 属性 (已弃用，使用 nodeType: "attribute")
-	Attribute bool `yaml:"attribute,omitempty"`
+	Attribute bool `json:"attribute,omitempty"`
 	// 声明数组模式是否应该包裹在外面 (已弃用，使用 nodeType: "element")
-	Wrapped bool `yaml:"wrapped,omitempty"`
+	Wrapped bool `json:"wrapped,omitempty"`
 }

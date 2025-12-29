@@ -1,12 +1,11 @@
 # basic info of project
 MODULE_NAME := goas
 
-TEST_CMD := cmd/test/main.go
 GOAS_CMD := cmd/goas/main.go
 
 # run test command
-test:
-	go run $(TEST_CMD)
+test: build
+	./bin/goas -dir "example/cmd,example/internal" -output "example/api"
 
 # goas
 goas:

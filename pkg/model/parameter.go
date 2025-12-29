@@ -3,46 +3,46 @@ package model
 // Parameter 描述单个操作参数
 type Parameter struct {
 	// 允许引用
-	Ref string `yaml:"$ref,omitempty"`
+	Ref string `json:"$ref,omitempty"`
 	// 参数名称
-	Name string `yaml:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 	// 位置 (query, querystring, header, path, cookie)
-	In string `yaml:"in,omitempty"`
+	In string `json:"in,omitempty"`
 	// 简短描述
-	Description string `yaml:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 	// 是否必选
-	Required bool `yaml:"required,omitempty"`
+	Required bool `json:"required,omitempty"`
 	// 是否已弃用
-	Deprecated bool `yaml:"deprecated,omitempty"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// 是否允许空值
-	AllowEmptyValue bool `yaml:"allowEmptyValue,omitempty"`
+	AllowEmptyValue bool `json:"allowEmptyValue,omitempty"`
 
 	// 序列化相关
-	Style         string                `yaml:"style,omitempty"`
-	Explode       bool                  `yaml:"explode,omitempty"`
-	AllowReserved bool                  `yaml:"allowReserved,omitempty"`
-	Schema        *Schema               `yaml:"schema,omitempty"`
-	Example       any                   `yaml:"example,omitempty"`
-	Examples      map[string]*Example   `yaml:"examples,omitempty"`
-	Content       map[string]*MediaType `yaml:"content,omitempty"`
+	Style         string                `json:"style,omitempty"`
+	Explode       bool                  `json:"explode,omitempty"`
+	AllowReserved bool                  `json:"allowReserved,omitempty"`
+	Schema        *Schema               `json:"schema,omitempty"`
+	Example       any                   `json:"example,omitempty"`
+	Examples      map[string]*Example   `json:"examples,omitempty"`
+	Content       map[string]*MediaType `json:"content,omitempty"`
 }
 
 // Header 描述单个响应头
 type Header struct {
 	// 允许引用
-	Ref string `yaml:"$ref,omitempty"`
+	Ref string `json:"$ref,omitempty"`
 	// 简短描述
-	Description string `yaml:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 	// 是否必选
-	Required bool `yaml:"required,omitempty"`
+	Required bool `json:"required,omitempty"`
 	// 是否已弃用
-	Deprecated bool `yaml:"deprecated,omitempty"`
+	Deprecated bool `json:"deprecated,omitempty"`
 
 	// 序列化相关
-	Style    string                `yaml:"style,omitempty"`
-	Explode  bool                  `yaml:"explode,omitempty"`
-	Schema   *Schema               `yaml:"schema,omitempty"`
-	Example  any                   `yaml:"example,omitempty"`
-	Examples map[string]*Example   `yaml:"examples,omitempty"`
-	Content  map[string]*MediaType `yaml:"content,omitempty"`
+	Style    string                `json:"style,omitempty"`
+	Explode  bool                  `json:"explode,omitempty"`
+	Schema   *Schema               `json:"schema,omitempty"`
+	Example  any                   `json:"example,omitempty"`
+	Examples map[string]*Example   `json:"examples,omitempty"`
+	Content  map[string]*MediaType `json:"content,omitempty"`
 }

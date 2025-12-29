@@ -3,37 +3,37 @@ package model
 // SecurityScheme 定义一个安全方案
 type SecurityScheme struct {
 	// 允许引用
-	Ref string `yaml:"$ref,omitempty"`
+	Ref string `json:"$ref,omitempty"`
 	// 类型 (apiKey, http, mutualTLS, oauth2, openIdConnect)
-	Type string `yaml:"type"`
+	Type string `json:"type"`
 	// 简短描述
-	Description string `yaml:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 	// 参数名称与位置 (仅 apiKey)
-	Name string `yaml:"name,omitempty"`
-	In   string `yaml:"in,omitempty"`
+	Name string `json:"name,omitempty"`
+	In   string `json:"in,omitempty"`
 	// 授权方案与格式 (仅 http)
-	Scheme       string `yaml:"scheme,omitempty"`
-	BearerFormat string `yaml:"bearerFormat,omitempty"`
+	Scheme       string `json:"scheme,omitempty"`
+	BearerFormat string `json:"bearerFormat,omitempty"`
 	// OAuth 流配置
-	Flows *OAuthFlows `yaml:"flows,omitempty"`
+	Flows *OAuthFlows `json:"flows,omitempty"`
 	// OpenID 配置 URL
-	OpenIDConnectURL string `yaml:"openIdConnectUrl,omitempty"`
+	OpenIDConnectURL string `json:"openIdConnectUrl,omitempty"`
 }
 
 // OAuthFlows 持有支持的 OAuth 流配置
 type OAuthFlows struct {
-	Implicit          *OAuthFlow `yaml:"implicit,omitempty"`
-	Password          *OAuthFlow `yaml:"password,omitempty"`
-	ClientCredentials *OAuthFlow `yaml:"clientCredentials,omitempty"`
-	AuthorizationCode *OAuthFlow `yaml:"authorizationCode,omitempty"`
+	Implicit          *OAuthFlow `json:"implicit,omitempty"`
+	Password          *OAuthFlow `json:"password,omitempty"`
+	ClientCredentials *OAuthFlow `json:"clientCredentials,omitempty"`
+	AuthorizationCode *OAuthFlow `json:"authorizationCode,omitempty"`
 }
 
 // OAuthFlow 描述单个 OAuth 流程
 type OAuthFlow struct {
-	AuthorizationURL string            `yaml:"authorizationUrl,omitempty"`
-	TokenURL         string            `yaml:"tokenUrl,omitempty"`
-	RefreshURL       string            `yaml:"refreshUrl,omitempty"`
-	Scopes           map[string]string `yaml:"scopes"`
+	AuthorizationURL string            `json:"authorizationUrl,omitempty"`
+	TokenURL         string            `json:"tokenUrl,omitempty"`
+	RefreshURL       string            `json:"refreshUrl,omitempty"`
+	Scopes           map[string]string `json:"scopes"`
 }
 
 // SecurityRequirement 列出执行此操作所需的安全性方案
