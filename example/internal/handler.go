@@ -4,20 +4,17 @@ import (
 	"fmt"
 )
 
-// GetUser 获取用户详情
-// @Summary 获取用户详情
-// @Description 根据用户 ID 查询用户的详细信息
-// @Tags user
+// Login 	登录
+// @Summary 登录
+// @Description 用户名/密码登录
+// @Tags Auth
 // @Accept json
 // @Produce json
-// @Param id path int true "用户ID"
-// @Success 200 {object} model.Response[model.User] "成功"
-// @Failure 400 {object} model.ErrorResponse "参数错误"
-// @Failure 404 {object} model.ErrorResponse "用户不存在"
-// @Router /users/{id} [get]
-// @Security ApiKeyAuth
-func GetUser() {
-	fmt.Println("get user handler")
+// @Param login body model.LoginReq true "登录信息"
+// @Success 200 {object} model.Response[model.LoginRes] "成功"
+// @Router /admin/auth/login [post]
+func Login() {
+	fmt.Println("login handler")
 }
 
 // ListUsers 获取用户列表

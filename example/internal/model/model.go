@@ -30,3 +30,15 @@ type ErrorResponse struct {
 	Message string `json:"message" desc:"错误信息"`
 	Details string `json:"details,omitempty" desc:"详细信息"`
 }
+
+// LoginReq 登录请求
+type LoginReq struct {
+	Username string `json:"username" desc:"用户名"`
+	Password string `json:"password" desc:"密码"`
+}
+
+// LoginRes 登录详情
+type LoginRes struct {
+	AccessToken  string `json:"access_token" desc:"访问凭证"`
+	RefreshToken string `json:"refresh_token" desc:"刷新凭证"`
+}

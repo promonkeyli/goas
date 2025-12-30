@@ -1,34 +1,59 @@
 {
-  "openapi": "3.2.0",
+  "openapi": "",
   "info": {
-    "title": "Pet Store API",
-    "summary": "A sample pet store server",
-    "description": "This is a Go implementation of the OpenAPI 3.2 Pet Store.\nSupports user management and file uploads.",
-    "termsOfService": "http://localhost:8080/terms",
+    "title": "Mall API",
+    "description": "Mall API 服务接口文档",
+    "termsOfService": "http://swagger.io/terms/",
     "contact": {
       "name": "API Support",
-      "url": "http://localhost:8080/support",
-      "email": "support@example.com"
+      "url": "http://www.swagger.io/support",
+      "email": "support@swagger.io"
     },
     "license": {
       "name": "Apache 2.0",
-      "identifier": "Apache-2.0"
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "1.0.0"
+    "version": "1.0"
   },
   "servers": [
     {
-      "url": "http://localhost:8080/v1",
-      "description": "开发环境",
-      "name": "dev"
-    },
-    {
-      "url": "https://api.example.com/v1",
-      "description": "生产环境",
-      "name": "prod"
+      "url": "http://localhost:8081/"
     }
   ],
   "paths": {
+    "/admin/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "登录",
+        "description": "用户名/密码登录",
+        "operationId": "Login",
+        "requestBody": {
+          "description": "登录信息",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/model.ResponseOfLoginRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "tags": [
@@ -71,7 +96,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/model.ResponseOfUser]"
+                  "$ref": "#/components/schemas/model.ResponseOfmodel.PageListOfUser"
                 }
               }
             }
@@ -100,7 +125,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "$ref": "#/components/schemas/User"
               }
             }
           },
@@ -122,7 +147,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -131,63 +156,6 @@
       }
     },
     "/users/{id}": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "获取用户详情",
-        "description": "根据用户 ID 查询用户的详细信息",
-        "operationId": "GetUser",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "用户ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/model.ResponseOfUser"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "用户不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      },
       "put": {
         "tags": [
           "user"
@@ -212,7 +180,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "$ref": "#/components/schemas/User"
               }
             }
           },
@@ -234,7 +202,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -244,7 +212,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -279,7 +247,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -342,7 +310,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -352,30 +320,241 @@
     }
   },
   "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "title": "ErrorResponse",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "错误码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "description": "详细信息",
+            "type": "string"
+          },
+          "message": {
+            "description": "错误信息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "LoginReq": {
+        "title": "LoginReq",
+        "type": "object",
+        "properties": {
+          "password": {
+            "description": "密码",
+            "type": "string"
+          },
+          "username": {
+            "description": "用户名",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "LoginRes": {
+        "title": "LoginRes",
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "description": "访问凭证",
+            "type": "string"
+          },
+          "refresh_token": {
+            "description": "刷新凭证",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token"
+        ]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "age": {
+            "description": "年龄",
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "description": "邮箱",
+            "type": "string"
+          },
+          "id": {
+            "description": "用户ID",
+            "type": "integer",
+            "format": "int32"
+          },
+          "is_active": {
+            "description": "是否激活",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "用户名",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "is_active"
+        ]
+      },
+      "model.PageListOfUser": {
+        "title": "model.PageListOfUser",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "数据列表",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "page": {
+            "description": "当前页",
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "description": "每页数量",
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "description": "总数",
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "total",
+          "page",
+          "size",
+          "items"
+        ]
+      },
+      "model.ResponseOfLoginRes": {
+        "title": "model.ResponseOfLoginRes",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "$ref": "#/components/schemas/LoginRes",
+            "description": "数据"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      },
+      "model.ResponseOfUser": {
+        "title": "model.ResponseOfUser",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "$ref": "#/components/schemas/User",
+            "description": "数据"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      },
+      "model.ResponseOfmodel.PageListOfUser": {
+        "title": "model.ResponseOfmodel.PageListOfUser",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "$ref": "#/components/schemas/model.PageListOfUser",
+            "description": "数据"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      },
+      "model.ResponseOfstring": {
+        "title": "model.ResponseOfstring",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "description": "数据",
+            "type": "string"
+          },
+          "message": {
+            "description": "消息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data"
+        ]
+      }
+    },
     "securitySchemes": {
-      "ApiKeyAuth": {
+      "BearerAuth": {
         "type": "apiKey",
-        "name": "X-API-KEY",
+        "name": "Authorization",
+        "in": "header"
+      },
+      "CookieAuth": {
+        "type": "apiKey",
+        "name": "Cookie",
         "in": "header"
       }
     }
-  },
-  "security": [
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "tags": [
-    {
-      "name": "user",
-      "summary": "用户管理",
-      "description": "用户的增删改查操作",
-      "kind": "nav"
-    },
-    {
-      "name": "admin",
-      "summary": "管理后台",
-      "parent": "user"
-    }
-  ]
+  }
 }

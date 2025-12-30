@@ -173,11 +173,16 @@ func (p *Processor) resolveGenericSchema(pkg *packages.Package, baseType string,
 func generateGenericSchemaName(base string, typeArgs []string) string {
 	var parts []string
 	for _, arg := range typeArgs {
-		// 取类型的最后一部分 (model.User -> User)
-		if idx := strings.LastIndex(arg, "."); idx != -1 {
-			parts = append(parts, arg[idx+1:])
+		// 递归处理嵌套泛型
+		if nestedBase, nestedArgs := parseGenericType(arg); nestedBase != "" {
+			parts = append(parts, generateGenericSchemaName(nestedBase, nestedArgs))
 		} else {
-			parts = append(parts, arg)
+			// 取类型的最后一部分 (model.User -> User)
+			if idx := strings.LastIndex(arg, "."); idx != -1 {
+				parts = append(parts, arg[idx+1:])
+			} else {
+				parts = append(parts, arg)
+			}
 		}
 	}
 	return base + "Of" + strings.Join(parts, "And")
@@ -378,7 +383,10 @@ func parseTypePath(pkg *packages.Package, typeName string) (pkgPath, shortName s
 		}
 
 		if pkgPath == "" {
-			pkgPath = pkg.PkgPath // 假设是同包
+			// 如果在 imports 中没找到，可能是虽然没 import 但用了相同包名（在同一个大项目中）
+			// 或者是在注释里简写了。
+			// 这里我们保留 alias 作为 pkgPath，让 findPackage 去尝试模糊匹配
+			pkgPath = pkgAlias
 		}
 	} else {
 		// 没有包前缀，使用当前包
