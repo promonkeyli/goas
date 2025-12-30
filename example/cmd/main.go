@@ -13,8 +13,7 @@ import "fmt"
 // @Contact.Name API Support
 // @Contact.URL http://localhost:8080/support
 // @Contact.Email support@example.com
-//
-// @License.Name Apache 2.0
+
 // @License.Identifier Apache-2.0
 //
 // @Server http://localhost:8080/v1 name=dev 开发环境
